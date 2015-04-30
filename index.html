@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="Practice JavaScript">
+<meta name="keywords" content="HTML,CSS,JavaScript,Local Storage">
+<meta name="author" content="ddeveloperr.github.io">
+<title>JS Local data project</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<div class="wrapper">
+  <header class="header">JS Local data project - simple note-taking app</header>
+  <article class="main">
+    <p>Goal: Understend local storage using JavaScript!</p>
+    <p>The following code implements a simple note-taking application. It keeps the user's notes as an object, associating note titles with content strings. This object is encoded as JSON and stored in localStorage. The user can select a note from a "select" field and change that note's text in a "textarea". A note can be added by clicking a button.</p></ br>
+    
+Notes: <select id="list"></select>
+<button onclick="addNote()">new</button><br>
+<textarea id="currentnote" style="width: 100%; height: 10em">
+</textarea>
+
+<script>
+  var list = document.querySelector("#list");
+  function addToList(name) {
+    var option = document.createElement("option");
+    option.textContent = name;
+    list.appendChild(option);
+  }
+
+  // Initialize the list from localStorage
+  
+  var notes = JSON.parse(localStorage.getItem("notes")) ||
+              {"shopping list": ""};
+  for (var name in notes)
+    if (notes.hasOwnProperty(name))
+      addToList(name);
+
+  function saveToStorage() {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }
+
+  var current = document.querySelector("#currentnote");
+  current.value = notes[list.value];
+
+  list.addEventListener("change", function() {
+    current.value = notes[list.value];
+  });
+  current.addEventListener("change", function() {
+    notes[list.value] = current.value;
+    saveToStorage();
+  });
+
+  function addNote() {
+    var name = prompt("Note name", "");
+    if (!name) return;
+    if (!notes.hasOwnProperty(name)) {
+      notes[name] = "";
+      addToList(name);
+      saveToStorage();
+    }
+    list.value = name;
+    current.value = notes[name];
+  }
+</script>
+  </article>
+  <aside class="aside aside-1">Simple NOTE-taking app</aside>
+  <aside class="aside aside-2">I Like coding so much!</aside>
+  <footer class="footer"><br /><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />This work by <a cc="http://creativecommons.org/ns#" href="http://ddeveloperr.github.io/" property="cc:attributionName" rel="cc:attributionURL">ddeveloperr</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons License</a>.<br /></footer>
+</div>
+
+
+
+</body>
+</html>
